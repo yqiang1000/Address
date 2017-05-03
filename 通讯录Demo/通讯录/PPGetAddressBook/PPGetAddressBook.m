@@ -66,6 +66,7 @@
         
         NSMutableDictionary *addressBookDict = [NSMutableDictionary dictionary];
         [kPPAddressBookHandle getAddressBookDataSource:^(PPPersonModel *model) {
+            
             //获取到姓名的大写首字母
             NSString *firstLetterString = [self getFirstLetterFromString:model.name];
             //如果该字母对应的联系人模型不为空,则将此联系人模型添加到此数组中

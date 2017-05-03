@@ -12,4 +12,42 @@
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
+#import <Masonry.h>
+#import "UIColor+ShortCut.h"
+
+#define SCREEN_WIDTH ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.height)
+#define SCREEN_HEIGHT ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.height : [[UIScreen mainScreen] bounds].size.width)
+//首页
+#define COLOR_FD8000 [UIColor colorWithHexString:@"FD8000"] //swtichbar hot
+#define COLOR_FFBC11 [UIColor colorWithHexString:@"FFBC11"] //黄色
+#define COLOR_008F45 [UIColor colorWithHexString:@"008F45"] //绿色
+
+#define COLOR_000000 [UIColor colorWithHexString:@"000000"] //黑色
+#define COLOR_333333 [UIColor colorWithHexString:@"333333"] //swtichbar not hot
+#define COLOR_555555 [UIColor colorWithHexString:@"555555"]
+#define COLOR_777777 [UIColor colorWithHexString:@"777777"] //淡灰色
+#define COLOR_A3A3A3 [UIColor colorWithHexString:@"A3A3A3"] //灰色字
+#define COLOR_D7D7D7 [UIColor colorWithHexString:@"D7D7D7"] //Line
+#define COLOR_F1F1F1 [UIColor colorWithHexString:@"F1F1F1"] //背景色
+#define COLOR_F9F9F9 [UIColor colorWithHexString:@"F9F9F9"]
+#define COLOR_F2F2F2 [UIColor colorWithHexString:@"f2f2f2"]
+#define COLOR_FFCCCCCC [UIColor colorWithHexString:@"ffcccccc"]
+#define COLOR_F0801E [UIColor colorWithHexString:@"f0801e"]
+
+
+#define COLOR_C1 COLOR_FD8000 //主题橘色
+#define COLOR_C2 COLOR_FFBC11 //黄色
+#define COLOR_C3 COLOR_008F45 //绿色
+
+#define COLOR_B1 COLOR_000000
+#define COLOR_B2 COLOR_333333
+#define COLOR_B3 COLOR_555555
+#define COLOR_B4 COLOR_777777
+#define COLOR_B5 COLOR_A3A3A3 //灰色字
+#define COLOR_B6 COLOR_D7D7D7
+#define COLOR_B7 COLOR_F1F1F1
+#define COLOR_B8 COLOR_F9F9F9
+
+#import "UIImageView+WebCache.h"
+
 #endif /* PrefixHeader_pch */

@@ -32,6 +32,16 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+typedef enum AddressStatues {
+    kAddressStatuesNone      = 0,  //默认无
+    kAddressStatuesMobile    = 1,  //添加
+    kAddressStatuesNew       = 2,  //新的朋友
+    kAddressStatuesAdd       = 3,  //加好友
+    kAddressStatuesWait      = 4,  //等待验证
+    kAddressStatuesDone      = 5,  //已添加
+    kAddressStatuesAccept    = 6,  //接受
+}AddressStatues;
+
 @interface PPPersonModel : NSObject
 
 /** 联系人姓名*/
@@ -40,6 +50,9 @@
 @property (nonatomic, strong) NSMutableArray *mobileArray;
 /** 联系人头像*/
 @property (nonatomic, strong) UIImage *headerImage;
-
+/** 联系人状态*/
+@property (nonatomic, assign) AddressStatues statues;
+/** 是否选择联系人*/
+@property (nonatomic, assign) BOOL isInvite;
 
 @end

@@ -8,6 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface InviteView : UIView
+@class InviteView;
+
+typedef enum InviteType{
+    InviteTypeCancel = 1,
+    InviteTypeInvite = 2,
+}InviteType;
+
+@protocol InviteViewDelegate <NSObject>
+
+- (void)inviteView:(InviteView *)inviteView didSelectBtnType:(InviteType)type;
+
+@end
+
+@interface InviteView : UIView <InviteViewDelegate>
+
+@property (nonatomic, assign) id <InviteViewDelegate> inviteViewDelegate;
 
 @end

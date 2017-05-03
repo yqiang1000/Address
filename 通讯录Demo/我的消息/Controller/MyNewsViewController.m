@@ -1,3 +1,4 @@
+
 //
 //  MyNewsViewController.m
 //  通讯录Demo
@@ -7,8 +8,11 @@
 //
 
 #import "MyNewsViewController.h"
+#import "AFNetworking.h"
 
 @interface MyNewsViewController ()
+
+@property (nonatomic, strong) UITextField *textField;
 
 @end
 
@@ -17,11 +21,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self.view addSubview:self.textField];
+    self.textField.attributedPlaceholder;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UITextField *)textField {
+    if (!_textField) {
+        _textField = [UITextField new];
+    }
+    return _textField;
 }
 
 /*
