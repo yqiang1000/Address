@@ -189,6 +189,8 @@
 - (UIImageView *)iconImage {
     if (!_iconImage) {
         _iconImage = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _iconImage.layer.cornerRadius = 20.0;
+        _iconImage.clipsToBounds = YES;
     }
     return _iconImage;
 }

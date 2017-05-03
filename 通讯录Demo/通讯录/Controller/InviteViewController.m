@@ -8,12 +8,17 @@
 
 #import "InviteViewController.h"
 #import "AddressCell.h"
+#import "SearchViewCtrl.h"
 
-@interface InviteViewController () <UITableViewDelegate, UITableViewDataSource, AddressCellDelegate, UISearchBarDelegate>
+@interface InviteViewController () <UITableViewDelegate, UITableViewDataSource, AddressCellDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) UIImage *leftImage;
+@property (nonatomic, strong) UIView *searchBar;
+@property (nonatomic, strong) UIView *searchView;
+@property (nonatomic, strong) UIImageView *searchIcon;
+@property (nonatomic, strong) UITextField *searchField;
+@property (nonatomic, strong) UIButton *btnCancel;
+@property (nonatomic, strong) UITableView *resultTableView;
 
 @end
 
@@ -22,7 +27,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginediting:) name:UITextFieldTextDidBeginEditingNotification object:nil];
     [self setUI];
+    [self setAutoFrame];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,45 +43,47 @@
 
 - (void)setUI {
     [self.view addSubview:self.tableView];
-    [self updateSearchBar];
+    self.tableView.tableHeaderView = self.searchBar;
+    [_searchBar addSubview:self.btnCancel];
+    [_searchBar addSubview:self.searchView];
+    [_searchBar addSubview:self.searchIcon];
+    [_searchBar addSubview:self.searchField];
 }
 
-- (void)updateSearchBar {
-//    UITextField *searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)];
-    UITextField *searchField = [self.searchBar valueForKey:@"searchField"];
-    if (searchField) {
-        UIImageView *rightView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 7, 14, 14)];
-        rightView.image = [UIImage imageNamed:@"ic-选择框单选"];
-        rightView.contentMode = UIViewContentModeCenter;
-        searchField.rightView = rightView;
-        searchField.leftViewMode = UITextFieldViewModeAlways;
-        
-        
-        [searchField setBackgroundColor:[UIColor whiteColor]];
-        searchField.layer.cornerRadius = 14.0f;
-        searchField.textAlignment = NSTextAlignmentLeft;
-        searchField.layer.masksToBounds = YES;
-        [searchField mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(_searchBar.mas_left).offset(15);
-            make.centerY.equalTo(_searchBar.mas_centerY);
-        }];
-    }
+- (void)setAutoFrame {
     
-    // 修改UISearchBar右侧的取消按钮文字颜色
-    for (id obj in [self.searchBar subviews]) {
-        if ([obj isKindOfClass:[UIView class]]) {
-            for (id obj2 in [obj subviews]) {
-                if ([obj2 isKindOfClass:[UIButton class]]) {
-                    UIButton *btn = (UIButton *)obj2;
-                    // 修改文字颜色
-                    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    [btn setTitleColor:[UIColor yellowColor] forState:UIControlStateHighlighted];
-                    // 修改按钮文字
-                    [btn setTitle:@"取消" forState:UIControlStateNormal];
-                }
-            }
-        }
-    }
+    [self.searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.searchBar.mas_centerY);
+        make.height.equalTo(@28);
+        make.left.equalTo(self.searchBar.mas_left).offset(15);
+    }];
+    
+    [self.btnCancel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.searchBar.mas_centerY);
+        make.left.equalTo(self.searchView.mas_right).offset(12);
+        make.right.equalTo(self.searchBar.mas_right).offset(-15);
+        make.width.equalTo(@30);
+    }];
+    
+    [self.searchIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.searchBar.mas_centerY);
+        make.left.equalTo(self.searchView.mas_left).offset(14);
+        make.height.equalTo(@14);
+        make.width.equalTo(@14);
+    }];
+    
+    [self.searchField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.searchBar.mas_centerY);
+        make.left.equalTo(self.searchIcon.mas_right).offset(6);
+        make.right.equalTo(self.searchView.mas_right).offset(-14);
+        make.height.equalTo(@28);
+    }];
+}
+
+#pragma mark - AddressCellDelegate
+
+- (void)btnInviteSelected:(BOOL)selected model:(PPPersonModel *)model {
+    
 }
 
 #pragma mark - UITableViewDelegate
@@ -85,7 +98,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return 20;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -108,34 +121,48 @@
     return cell;
 }
 
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-
-}
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    return YES;
-}
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    
-}
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
-}
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_AVAILABLE_IOS(3_0) {
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     return YES;
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     
 }
 
-- (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar {
+- (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason {
     
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    return YES;
+}
+
+- (void)btnClick:(UIButton *)sender {
+    NSLog(@"显示");
+    [self.searchField endEditing:YES];
+    self.searchField.text = nil;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)beginediting:(UITapGestureRecognizer *)tap {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    if (_resultTableView) {
+        _resultTableView = [UITableView alloc] initWithFrame:<#(CGRect)#> style:<#(UITableViewStyle)#>
+    }
 }
 
 #pragma mark - public
@@ -148,21 +175,60 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.tableHeaderView = self.searchBar;
     }
     return _tableView;
 }
 
-- (UISearchBar *)searchBar {
+
+- (UIView *)searchBar {
     if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 44)];
-        _searchBar.delegate = self;
-        _searchBar.showsCancelButton = YES;
-        [_searchBar setContentMode:UIViewContentModeLeft];
-        _searchBar.placeholder = @"搜索好友或通过手机号邀请";
-        [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"ic-选择框单选"]];//@"ic-搜索通讯录"]];
+        _searchBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 44)];
+        _searchBar.backgroundColor = [UIColor lightGrayColor];
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, SCREEN_WIDTH, 0.5)];
+        lineView.backgroundColor = [UIColor blackColor];
+        [_searchBar addSubview:lineView];
     }
     return _searchBar;
+}
+
+- (UIView *)searchView {
+    if (!_searchView) {
+        _searchView = [[UIView alloc] initWithFrame:CGRectZero];
+        _searchView.backgroundColor = [UIColor whiteColor];
+        _searchView.layer.cornerRadius = 14.0;
+        _searchView.layer.borderWidth = 0.5;
+        _searchView.layer.borderColor = [UIColor blackColor].CGColor;
+        _searchView.clipsToBounds = YES;
+    }
+    return _searchView;
+}
+
+- (UIImageView *)searchIcon {
+    if (!_searchIcon) {
+        _searchIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic-搜索通讯录"]];
+    }
+    return _searchIcon;
+}
+
+- (UITextField *)searchField {
+    if (!_searchField) {
+        _searchField = [[UITextField alloc] initWithFrame:CGRectZero];
+        _searchField.borderStyle = UITextBorderStyleNone;
+        _searchField.placeholder = @"搜索好友或通过手机号邀请";
+        _searchField.font = [UIFont systemFontOfSize:12.0];
+    }
+    return _searchField;
+}
+
+- (UIButton *)btnCancel {
+    if (!_btnCancel) {
+        _btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_btnCancel addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_btnCancel setTitle:@"取消" forState:UIControlStateNormal];
+        [_btnCancel setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        _btnCancel.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    }
+    return _btnCancel;
 }
 
 @end
